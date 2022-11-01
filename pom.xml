@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>name.mjoseland</groupId>
-    <artifactId>demo_virtual_threads</artifactId>
+    <artifactId>primes_demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo_virtual_threads</name>
-    <description>demo_virtual_threads</description>
+    <name>primes_demo</name>
+    <description>primes_demo</description>
     <properties>
         <java.version>19</java.version>
         <spring-shell.version>3.0.0-M1</spring-shell.version>
