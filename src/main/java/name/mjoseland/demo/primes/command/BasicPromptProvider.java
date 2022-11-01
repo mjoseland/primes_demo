@@ -1,4 +1,4 @@
-package name.mjoseland.demo.virtualthreads.command;
+package name.mjoseland.demo.primes.command;
 
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;

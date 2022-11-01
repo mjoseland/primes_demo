@@ -1,4 +1,4 @@
-package name.mjoseland.demo.virtualthreads.primes;
+package name.mjoseland.demo.primes.primes;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
