@@ -1,9 +1,11 @@
 package name.mjoseland.demo.primes.primes;
 
+import name.mjoseland.demo.primes.util.SimpleUnsafeBitset;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+// TODO rename parent package so it isn't primes.primes
 /**
  * <a href="https://web.archive.org/web/20140724050940/http://fpx.de/fp/Software/Sieve.html">...</a>
  */
@@ -23,13 +25,13 @@ public class SieveOfEratosthenesPrimeFinder implements PrimeFinder {
         //  2  ->  5
         //  10 -> 21
         int bitSetSize = maxNumber / 2 + maxNumber % 2;
-        BitSet oddNumbersBitSet = new BitSet(bitSetSize);
+        SimpleUnsafeBitset oddNumbersBitSet = new SimpleUnsafeBitset(bitSetSize);
 
         int maxNumberSqrt = (int) Math.sqrt(maxNumber);
 
         // iterate from 1..(bitSetSize - 1) inclusive
         //  (ie. array elements representing 3..maxOddNumber)
-        for (int i = 1; i > 0 && i < bitSetSize; i = oddNumbersBitSet.nextClearBit(i + 1)) {
+        for (int i = 1; i > 0 && i < bitSetSize; i = oddNumbersBitSet.nextUnsetBit(i + 1)) {
             int primeNumber = (2 * i) + 1;
             result.add(primeNumber);
 
@@ -40,7 +42,7 @@ public class SieveOfEratosthenesPrimeFinder implements PrimeFinder {
         return result;
     }
 
-    private static void markFactors(int primeNumber, int maxNumber, BitSet oddNumbersBitSet) {
+    private static void markFactors(int primeNumber, int maxNumber, SimpleUnsafeBitset oddNumbersBitSet) {
         int doublePrimeNumber = primeNumber * 2;
         for (int i = primeNumber * primeNumber; i > 0 && i <= maxNumber; i += doublePrimeNumber) {
             oddNumbersBitSet.set(i / 2);

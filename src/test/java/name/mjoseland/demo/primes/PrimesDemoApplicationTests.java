@@ -9,5 +9,4 @@ class PrimesDemoApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
