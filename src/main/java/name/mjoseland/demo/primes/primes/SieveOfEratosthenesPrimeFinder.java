@@ -18,7 +18,7 @@ public class SieveOfEratosthenesPrimeFinder implements PrimeFinder {
         if (maxNumber >= 2)
             result.add(2);
 
-        // if an index representing an integer is true, then it has known factors
+        // if an index representing an integer is true, then at least one factor has been identified
         // index -> integer mapping (2*i+1), examples:
         //  0  ->  1
         //  1  ->  3
@@ -31,13 +31,16 @@ public class SieveOfEratosthenesPrimeFinder implements PrimeFinder {
 
         // iterate from 1..(bitSetSize - 1) inclusive
         //  (ie. array elements representing 3..maxOddNumber)
-        for (int i = 1; i > 0 && i < bitSetSize; i = oddNumbersBitSet.nextUnsetBit(i + 1)) {
+        for (int i = 1; i > 0; i = oddNumbersBitSet.nextUnsetBit(i + 1)) {
             int primeNumber = (2 * i) + 1;
             result.add(primeNumber);
 
             if (primeNumber <= maxNumberSqrt)
                 markFactors(primeNumber, maxNumber, oddNumbersBitSet);
         }
+
+        if (result.get(result.size() - 1) > maxNumber)
+            result.remove(result.size() - 1);
 
         return result;
     }
