@@ -36,7 +36,6 @@ public class PrimeFinderTest {
 
     private static Stream<Arguments> getPrimeFinders() {
         return Stream.of(
-            Arguments.of(new BasicPrimeFinder()),
             Arguments.of(new SieveOfEratosthenesPrimeFinder())
         );
     }
