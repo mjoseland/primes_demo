@@ -7,13 +7,13 @@ import java.util.*;
 
 // TODO rename parent package so it isn't primes.primes
 /**
- * <a href="https://web.archive.org/web/20140724050940/http://fpx.de/fp/Software/Sieve.html">...</a>
+ * An implementation of the <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>.
  */
 @Component
-public class SieveOfEratosthenesPrimeFinder implements PrimeFinder {
+public final class SieveOfEratosthenesPrimeFinder implements PrimeFinder {
 
     @Override
-    public List<Integer> getPrimes(int maxNumber) {
+    public List<Integer> getPrimes(final int maxNumber) {
         List<Integer> result = new ArrayList<>();
         if (maxNumber >= 2)
             result.add(2);
@@ -45,9 +45,13 @@ public class SieveOfEratosthenesPrimeFinder implements PrimeFinder {
         return result;
     }
 
-    private static void markFactors(int primeNumber, int maxNumber, SimpleUnsafeBitset oddNumbersBitSet) {
+    private static void markFactors(
+        final int primeNumber,
+        final int maxNumber,
+        final SimpleUnsafeBitset oddNumbersBitSet
+    ) {
         int doublePrimeNumber = primeNumber * 2;
-        for (int i = primeNumber * primeNumber; i > 0 && i <= maxNumber; i += doublePrimeNumber) {
+        for (int i = primeNumber * primeNumber; i <= maxNumber; i += doublePrimeNumber) {
             oddNumbersBitSet.set(i / 2);
         }
     }
