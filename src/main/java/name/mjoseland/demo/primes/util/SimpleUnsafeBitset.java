@@ -7,17 +7,35 @@ package name.mjoseland.demo.primes.util;
  */
 public class SimpleUnsafeBitset {
 
-    private static final int RIGHT_SHIFT_FOR_DIVIDE_BY_BITS_PER_LONG = 6;
+    private static final int RIGHT_SHIFT_FOR_LONG_INDEX = 6;
     private static final int BITS_PER_LONG = 64;
 
-    private final long highestInteger;
+    public static final int MAX_SIZE = Integer.MAX_VALUE;
+
+    private final int size;
     private final long[] longArray;
 
-    public SimpleUnsafeBitset(int highestInteger) {
-        int intArraySize = highestInteger / BITS_PER_LONG + 1;
+    public SimpleUnsafeBitset(final int size) {
+        if (size < 1) {
+            throw new IllegalArgumentException("Size must be between 1 and " + MAX_SIZE + " (inclusive)");
+        }
 
-        this.highestInteger = highestInteger;
-        this.longArray = new long[intArraySize];
+        int longArraySize;
+        if (size % 64 == 0)
+            longArraySize = size >> RIGHT_SHIFT_FOR_LONG_INDEX;
+        else
+            longArraySize = (size >> RIGHT_SHIFT_FOR_LONG_INDEX) + 1;
+
+        this.size = size;
+        this.longArray = new long[longArraySize];
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public boolean get(final int index) {
+        return (longArray[index >> RIGHT_SHIFT_FOR_LONG_INDEX] & (1L << index)) != 0;
     }
 
     /**
@@ -25,8 +43,44 @@ public class SimpleUnsafeBitset {
      *
      * @param index the index of the bit to set to 1
      */
-    public void set(int index) {
-        longArray[index >> RIGHT_SHIFT_FOR_DIVIDE_BY_BITS_PER_LONG] |= 1L << index;
+    public void set(final int index) {
+        longArray[index >> RIGHT_SHIFT_FOR_LONG_INDEX] |= 1L << index;
+    }
+
+    /**
+     * Toggles a bit at a single index.
+     *
+     * @param index the index of the bit to set to 1
+     */
+    public void toggle(final int index) {
+        longArray[index >> RIGHT_SHIFT_FOR_LONG_INDEX] ^= 1L << index;
+    }
+
+    /**
+     * Finds the index of the next 1 bit that is >= the provided start index.
+     *
+     * @param startIndex the start index
+     * @return the index of the next bit set to 1 or -1 if out-of-bounds
+     */
+    public int nextSetBit(final int startIndex) {
+        int jStartIndex = startIndex % BITS_PER_LONG;
+
+        for (int i = startIndex >> RIGHT_SHIFT_FOR_LONG_INDEX; i < longArray.length; i++) {
+            for (int j = jStartIndex; j < BITS_PER_LONG; j++) {
+                if ((longArray[i] & (1L << j)) != 0) {
+                    int nextSetValue = i * BITS_PER_LONG + j;
+
+                    if (nextSetValue >= this.size)
+                        nextSetValue = -1;
+
+                    return nextSetValue;
+                }
+            }
+
+            jStartIndex = 0;
+        }
+
+        return -1;
     }
 
     /**
@@ -35,7 +89,7 @@ public class SimpleUnsafeBitset {
      * @param startIndex the start index
      * @return the index of the next bit set to 0 or -1 if out-of-bounds
      */
-    public int nextUnsetBit(int startIndex) {
+    public int nextUnsetBit(final int startIndex) {
         int jStartIndex = startIndex % BITS_PER_LONG;
 
         for (int i = startIndex / BITS_PER_LONG; i < longArray.length; i++) {
@@ -43,12 +97,13 @@ public class SimpleUnsafeBitset {
                 if ((longArray[i] & (1L << j)) == 0) {
                     int nextUnsetValue = i * BITS_PER_LONG + j;
 
-                    if (nextUnsetValue > highestInteger)
+                    if (nextUnsetValue >= this.size)
                         nextUnsetValue = -1;
 
                     return nextUnsetValue;
                 }
             }
+
             jStartIndex = 0;
         }
 
