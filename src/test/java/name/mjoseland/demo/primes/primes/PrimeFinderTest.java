@@ -9,24 +9,26 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PrimeFinderTest {
+class PrimeFinderTest {
 
     @ParameterizedTest
     @MethodSource("getPrimeFinders")
-    public void assertForMaxNumber100(PrimeFinder primeFinder) {
+    void assertForMaxNumber100(PrimeFinder primeFinder) {
         List<Integer> result = primeFinder.getPrimes(100);
 
-        assertThat(result).hasSize(25);
-        assertThat(result).containsAll(
-            List.of(
-                2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
-            )
-        );
+        assertThat(result)
+            .hasSize(25)
+            .containsAll(
+                List.of(
+                    2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89,
+                    97
+                )
+            );
     }
 
     @ParameterizedTest
     @MethodSource("getPrimeFinders")
-    public void assertCountForMaxNumber1000000(PrimeFinder primeFinder) {
+    void assertCountForMaxNumber1000000(PrimeFinder primeFinder) {
         List<Integer> result = primeFinder.getPrimes(1000000);
 
         assertThat(result).hasSize(78498);

@@ -10,6 +10,9 @@ public class SimpleUnsafeBitset {
     private static final int RIGHT_SHIFT_FOR_LONG_INDEX = 6;
     private static final int BITS_PER_LONG = 64;
 
+    // Maximum number of bits that can be stored. This number of bits will be stored in a long array with 2^25
+    // (33,554,432) elements. a larger max size of (2^31 - 1) * 64 is theoretically possible, but it would require
+    // long -> int casting to access the array and require approx. 17.2 GB of memory.
     public static final int MAX_SIZE = Integer.MAX_VALUE;
 
     private final int size;

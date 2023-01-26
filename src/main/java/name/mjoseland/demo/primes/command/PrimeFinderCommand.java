@@ -19,7 +19,7 @@ public class PrimeFinderCommand {
     }
 
     @ShellMethod("Returns count and ten highest primes <= a number")
-    public String primes(int number) {
+    public String primes(final int number) {
         if (number <= 0) {
             return "Please enter a positive integer";
         }
