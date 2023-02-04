@@ -14,7 +14,7 @@ public class PrimeFinderCommand {
 
     private final PrimeFinder basicPrimeFinder;
 
-    PrimeFinderCommand(@Autowired @Qualifier("sieveOfEratosthenesPrimeFinder") PrimeFinder basicPrimeFinder) {
+    PrimeFinderCommand(@Autowired @Qualifier("sieveOfAtkinPrimeFinder") PrimeFinder basicPrimeFinder) {
         this.basicPrimeFinder = basicPrimeFinder;
     }
 
@@ -36,8 +36,14 @@ public class PrimeFinderCommand {
                         .map(prime -> Integer.toString(prime))
                         .collect(Collectors.joining(", "));
 
-        return "highest ten primes: " + primesStringList +
-                "\ntotal primes: " + primesList.size() +
-                "\nruntime: " + runTime + "ms";
+        return String.format(
+            """
+                highest ten primes: %s
+                total primes: %d
+                runtime: %dms""",
+            primesStringList,
+            primesList.size(),
+            runTime
+        );
     }
 }
