@@ -4,6 +4,7 @@ import name.mjoseland.demo.primes.util.SimpleUnsafeBitset;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.IntSupplier;
@@ -23,16 +24,16 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
     private static final Set<Integer> SET_FOR_STEP_3_3 = Set.of(11, 23, 47, 59);
 
     // numbers less than 60 that aren't divisible by 2, 3, or 5
-    private static final List<Integer> WHEEL_HIT_POSITIONS =
-        List.of(1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59);
+    private static final int[] WHEEL_HIT_POSITIONS =
+        { 1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59 };
 
     private static final int[] WHEEL_HIT_POSITION_INDICES = new int[60];
 
     static {
         // for all values in WHEEL_HIT_POSITIONS, set value at corresponding index in WHEEL_HIT_POSITION_INDICES to the
         // index of the value in WHEEL_HIT_POSITIONS
-        IntStream.range(0, WHEEL_HIT_POSITIONS.size())
-            .forEach(i -> WHEEL_HIT_POSITION_INDICES[WHEEL_HIT_POSITIONS.get(i)] = i);
+        IntStream.range(0, WHEEL_HIT_POSITIONS.length)
+            .forEach(i -> WHEEL_HIT_POSITION_INDICES[WHEEL_HIT_POSITIONS[i]] = i);
     }
 
 
@@ -71,11 +72,11 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
      */
     private static SimpleUnsafeBitset buildSieveBitset(final int maxNumber) {
         // count of all n <= (maxNumber - (maxNumber % 60))
-        int ltEqFactorOf60 = (maxNumber / 60) * WHEEL_HIT_POSITIONS.size();
+        int ltEqFactorOf60 = (maxNumber / 60) * WHEEL_HIT_POSITIONS.length;
 
         // count of all n > (maxNumber - (maxNumber % 60))
         int gtFactorOf60 =
-            (int) WHEEL_HIT_POSITIONS.stream()
+            (int) Arrays.stream(WHEEL_HIT_POSITIONS)
                 .filter(position -> position <= (maxNumber % 60))
                 .count();
 
@@ -199,7 +200,7 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
      * @return the index of the bit in bitset
      */
     private static int toSieveBitsetIndex(final int n) {
-        return ((n / 60) * WHEEL_HIT_POSITIONS.size()) + WHEEL_HIT_POSITION_INDICES[n % 60];
+        return ((n / 60) * WHEEL_HIT_POSITIONS.length) + WHEEL_HIT_POSITION_INDICES[n % 60];
     }
 
     /**
@@ -209,6 +210,6 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
      * @return the integer corresponding to the index
      */
     private static int toNumberRepresentedByBitsetIndex(final int i) {
-        return (i / WHEEL_HIT_POSITIONS.size()) * 60 + WHEEL_HIT_POSITIONS.get(i % WHEEL_HIT_POSITIONS.size());
+        return (i / WHEEL_HIT_POSITIONS.length) * 60 + WHEEL_HIT_POSITIONS[i % WHEEL_HIT_POSITIONS.length];
     }
 }
