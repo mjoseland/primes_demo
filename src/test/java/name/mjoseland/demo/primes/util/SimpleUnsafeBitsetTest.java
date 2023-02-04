@@ -67,6 +67,21 @@ public class SimpleUnsafeBitsetTest {
     }
 
     @Nested
+    class SetUnsetGetTest {
+
+        @Test
+        void givenSize2_whenSet0Unset0GetAll_thenResultIsFalse() {
+            SimpleUnsafeBitset bitset = new SimpleUnsafeBitset(1);
+
+            bitset.set(0);
+            assertThat(bitset.get(0)).isTrue();
+
+            bitset.unset(0);
+            assertThat(bitset.get(0)).isFalse();
+        }
+    }
+
+    @Nested
     class ToggleGetTest {
 
         @Test

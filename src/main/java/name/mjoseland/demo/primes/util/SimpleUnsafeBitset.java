@@ -51,6 +51,15 @@ public class SimpleUnsafeBitset {
     }
 
     /**
+     * Sets a bit at a single index to 0.
+     *
+     * @param index the index of the bit to set to 1
+     */
+    public void unset(final int index) {
+        longArray[index >> RIGHT_SHIFT_FOR_LONG_INDEX] &= ~(1L << index);
+    }
+
+    /**
      * Toggles a bit at a single index.
      *
      * @param index the index of the bit to set to 1
