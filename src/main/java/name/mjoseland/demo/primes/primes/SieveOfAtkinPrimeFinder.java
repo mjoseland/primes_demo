@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.IntSupplier;
+import java.util.stream.IntStream;
 
 /**
  * An implementation of the <a href="https://en.wikipedia.org/wiki/Sieve_of_Atkin#Pseudocode">Sieve of Atkin<a>.
@@ -24,6 +25,16 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
     // numbers less than 60 that aren't divisible by 2, 3, or 5
     private static final List<Integer> WHEEL_HIT_POSITIONS =
         List.of(1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59);
+
+    private static final int[] WHEEL_HIT_POSITION_INDICES = new int[60];
+
+    static {
+        // for all values in WHEEL_HIT_POSITIONS, set value at corresponding index in WHEEL_HIT_POSITION_INDICES to the
+        // index of the value in WHEEL_HIT_POSITIONS
+        IntStream.range(0, WHEEL_HIT_POSITIONS.size())
+            .forEach(i -> WHEEL_HIT_POSITION_INDICES[WHEEL_HIT_POSITIONS.get(i)] = i);
+    }
+
 
     @Override
     public List<Integer> getPrimes(final int maxNumber) {
@@ -188,7 +199,7 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
      * @return the index of the bit in bitset
      */
     private static int toSieveBitsetIndex(final int n) {
-        return ((n / 60) * WHEEL_HIT_POSITIONS.size()) + WHEEL_HIT_POSITIONS.indexOf(n % 60);
+        return ((n / 60) * WHEEL_HIT_POSITIONS.size()) + WHEEL_HIT_POSITION_INDICES[n % 60];
     }
 
     /**
