@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.function.IntSupplier;
 import java.util.stream.IntStream;
 
@@ -18,10 +17,12 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
 
     // if a sieve bitset is initialised for maxNumber >= 7, this value will be the index representing n=7
     private static final int INDEX_OF_7_IN_SIEVE_BITSET = 1;
+
     private static final List<Integer> FIRST_THREE_PRIMES = List.of(2, 3, 5);
-    private static final Set<Integer> SET_FOR_STEP_3_1 = Set.of(1, 13, 17, 29, 37, 41, 49, 53);
-    private static final Set<Integer> SET_FOR_STEP_3_2 = Set.of(7, 19, 31, 43);
-    private static final Set<Integer> SET_FOR_STEP_3_3 = Set.of(11, 23, 47, 59);
+
+    private static final boolean[] SET_FOR_STEP_3_1 = new boolean[60];
+    private static final boolean[] SET_FOR_STEP_3_2 = new boolean[60];
+    private static final boolean[] SET_FOR_STEP_3_3 = new boolean[60];
 
     // numbers less than 60 that aren't divisible by 2, 3, or 5
     private static final int[] WHEEL_HIT_POSITIONS =
@@ -30,6 +31,19 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
     private static final int[] WHEEL_HIT_POSITION_INDICES = new int[60];
 
     static {
+        // initialise arrays used by in steps 3.1, 3.2, and 3.3
+        List.of(1, 13, 17, 29, 37, 41, 49, 53).forEach(
+            i -> SET_FOR_STEP_3_1[i] = true
+        );
+
+        List.of(7, 19, 31, 43).forEach(
+            i -> SET_FOR_STEP_3_2[i] = true
+        );
+
+        List.of(11, 23, 47, 59).forEach(
+            i -> SET_FOR_STEP_3_3[i] = true
+        );
+
         // for all values in WHEEL_HIT_POSITIONS, set value at corresponding index in WHEEL_HIT_POSITION_INDICES to the
         // index of the value in WHEEL_HIT_POSITIONS
         IntStream.range(0, WHEEL_HIT_POSITIONS.length)
@@ -108,7 +122,7 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
                 int n = 4 * x * x + y * y;
 
                 // if n % 60 is in SET_FOR_STEP_3_1, then toggle the bit at index n
-                if (SET_FOR_STEP_3_1.contains(n % 60)) {
+                if (SET_FOR_STEP_3_1[n % 60]) {
                     sieveBitset.toggle(toSieveBitsetIndex(n));
                 }
             }
@@ -128,7 +142,7 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
                 int n = 3 * x * x + y * y;
 
                 // if n % 60 is in SET_FOR_STEP_3_2, then toggle the bit at index n
-                if (SET_FOR_STEP_3_2.contains(n % 60)) {
+                if (SET_FOR_STEP_3_2[n % 60]) {
                     sieveBitset.toggle(toSieveBitsetIndex(n));
                 }
             }
@@ -146,7 +160,7 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
                 int n = 3 * x * x - y * y;
 
                 // if n % 60 is in SET_FOR_STEP_3_3, then toggle the bit at index n
-                if (SET_FOR_STEP_3_3.contains(n % 60)) {
+                if (SET_FOR_STEP_3_3[n % 60]) {
                     sieveBitset.toggle(toSieveBitsetIndex(n));
                 }
             }
