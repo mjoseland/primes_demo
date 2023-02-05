@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.IntSupplier;
 import java.util.stream.IntStream;
 
 /**
@@ -173,13 +172,17 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
     ) {
         final int maxN = (int) Math.sqrt(maxNumber);
 
-        IntSupplier nSupplier = new AtkinWheelIntSupplier();
-        // skip the number 1 so 7 is the first number to be eliminated
-        nSupplier.getAsInt();
+        int i = 0;
+        int j = 0;
 
-        for (int n = nSupplier.getAsInt(); n <= maxN; n = nSupplier.getAsInt()) {
+        for (int n = 1; n <= maxN; n = (i * 60) + WHEEL_HIT_POSITIONS[j++]) {
             if (sieveBitset.get(toSieveBitsetIndex(n))) {
                 eliminateMultiplesOfSquaredPrime(sieveBitset, maxNumber, n * n);
+            }
+
+            if (j >= WHEEL_HIT_POSITIONS.length) {
+                i++;
+                j = 0;
             }
         }
     }
@@ -189,10 +192,16 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
         final int maxNumber,
         final int squaredPrime
     ) {
-        IntSupplier nSupplier = new AtkinWheelIntSupplier();
+        int i = 0;
+        int j = 0;
 
-        for (int n = squaredPrime * nSupplier.getAsInt(); n <= maxNumber && n > 0; n = squaredPrime * nSupplier.getAsInt()) {
+        for (int n = squaredPrime; n <= maxNumber && n > 0; n = squaredPrime * ((i * 60) + WHEEL_HIT_POSITIONS[j++])) {
             sieveBitset.unset(toSieveBitsetIndex(n));
+
+            if (j >= WHEEL_HIT_POSITIONS.length) {
+                i++;
+                j = 0;
+            }
         }
     }
 
@@ -202,7 +211,11 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
     ) {
         // iterate through all bits set to 1. if the list is traversed in-order and the composite elimination is
         // performed, then these bits correspond to primes.
-        for (int i = sieveBitset.nextSetBit(INDEX_OF_7_IN_SIEVE_BITSET); i < sieveBitset.size() && i > 0; i = sieveBitset.nextSetBit(i + 1)) {
+        for (
+            int i = sieveBitset.nextSetBit(INDEX_OF_7_IN_SIEVE_BITSET);
+            i < sieveBitset.size() && i > 0;
+            i = sieveBitset.nextSetBit(i + 1)
+        ) {
             result.add(toNumberRepresentedByBitsetIndex(i));
         }
     }
