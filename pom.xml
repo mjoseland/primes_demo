@@ -15,7 +15,8 @@
     <description>primes_demo</description>
     <properties>
         <java.version>19</java.version>
-        <spring-shell.version>3.0.0-M1</spring-shell.version>
+        <spring-shell.version>3.0.0</spring-shell.version>
+        <spring-boot.version>3.0.2</spring-boot.version>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
     </properties>
@@ -28,6 +29,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -45,11 +47,11 @@
 
     <build>
         <plugins>
-<!--            TODO review-->
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+            </plugin>
         </plugins>
     </build>
     <repositories>
