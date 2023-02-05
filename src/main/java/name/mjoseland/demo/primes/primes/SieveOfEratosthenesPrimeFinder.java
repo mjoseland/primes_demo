@@ -3,7 +3,8 @@ package name.mjoseland.demo.primes.primes;
 import name.mjoseland.demo.primes.util.SimpleUnsafeBitset;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 // TODO rename parent package so it isn't primes.primes
 /**

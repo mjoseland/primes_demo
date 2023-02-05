@@ -24,9 +24,10 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
     private static final boolean[] SET_FOR_STEP_3_3 = new boolean[60];
 
     // numbers less than 60 that aren't divisible by 2, 3, or 5
-    private static final int[] WHEEL_HIT_POSITIONS =
-        { 1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59 };
+    private static final int[] WHEEL_HIT_POSITIONS = { 1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59 };
 
+    // for all indices in this array that correspond to a value in WHEEL_HIT_POSITIONS, stores the index of the value in
+    // WHEEL_HIT_POSITIONS
     private static final int[] WHEEL_HIT_POSITION_INDICES = new int[60];
 
     static {
@@ -67,9 +68,9 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
         // all values are initialised to 0, indicating that they haven't been found to be prime yet
         SimpleUnsafeBitset sieveBitset = buildSieveBitset(maxNumber);
 
-        toggleForStep3_1(sieveBitset, maxNumber);
-        toggleForStep3_2(sieveBitset, maxNumber);
-        toggleForStep3_3(sieveBitset, maxNumber);
+        toggleForStep3Part1(sieveBitset, maxNumber);
+        toggleForStep3Part2(sieveBitset, maxNumber);
+        toggleForStep3Part3(sieveBitset, maxNumber);
         eliminateComposites(sieveBitset, maxNumber);
 
         transferBitsetPrimesToResult(sieveBitset, result);
@@ -109,13 +110,13 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
         return new ArrayList<>(FIRST_THREE_PRIMES);
     }
 
-    private static void toggleForStep3_1(final SimpleUnsafeBitset sieveBitset, final int maxNumber) {
+    private static void toggleForStep3Part1(final SimpleUnsafeBitset sieveBitset, final int maxNumber) {
         // max possible value of x in the range [ 1, 2, 3, ... ]
         int maxX = (int) Math.sqrt((maxNumber - 1) >> 2);
 
         for (int x = 1; x <= maxX; x++) {
             // max possible value of y in the range [ 1, 3, 5, ... ]
-            int maxY = (int) Math.sqrt(maxNumber - (4 * x * x));
+            int maxY = (int) Math.sqrt((double) maxNumber - (4 * x * x));
 
             for (int y = 1; y <= maxY; y += 2) {
                 int n = 4 * x * x + y * y;
@@ -128,14 +129,14 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
         }
     }
 
-    private static void toggleForStep3_2(final SimpleUnsafeBitset sieveBitset, final int maxNumber) {
+    private static void toggleForStep3Part2(final SimpleUnsafeBitset sieveBitset, final int maxNumber) {
         // max possible value of x in the range [ 1, 3, 5, ... ]
         @SuppressWarnings("IntegerDivisionInFloatingPointContext")
         int maxX = (int) Math.sqrt(((maxNumber - 4) / 3));
 
         for (int x = 1; x <= maxX; x += 2) {
             // max possible value of y in the range [ 2, 4, 6, ... ]
-            int maxY = (int) Math.sqrt(maxNumber - (3 * x * x));
+            int maxY = (int) Math.sqrt((double) maxNumber - (3 * x * x));
 
             for (int y = 2; y <= maxY; y += 2) {
                 int n = 3 * x * x + y * y;
@@ -148,7 +149,7 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
         }
     }
 
-    private static void toggleForStep3_3(final SimpleUnsafeBitset sieveBitset, final int maxNumber) {
+    private static void toggleForStep3Part3(final SimpleUnsafeBitset sieveBitset, final int maxNumber) {
         // max possible value of x in the range [ 2, 3, 4, ... ]
         int maxX = (int) (Math.sqrt((double) 2 * maxNumber + 3) / 2 - 0.5);
 
