@@ -1,4 +1,4 @@
-package name.mjoseland.demo.primes.primes;
+package name.mjoseland.demo.primes.find;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

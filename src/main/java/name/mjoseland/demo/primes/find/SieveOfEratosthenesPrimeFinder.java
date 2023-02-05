@@ -1,4 +1,4 @@
-package name.mjoseland.demo.primes.primes;
+package name.mjoseland.demo.primes.find;
 
 import name.mjoseland.demo.primes.util.SimpleUnsafeBitset;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO rename parent package so it isn't primes.primes
 /**
  * An implementation of the <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>.
  */

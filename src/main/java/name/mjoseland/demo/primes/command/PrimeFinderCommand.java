@@ -1,6 +1,6 @@
 package name.mjoseland.demo.primes.command;
 
-import name.mjoseland.demo.primes.primes.PrimeFinder;
+import name.mjoseland.demo.primes.find.PrimeFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.shell.standard.ShellComponent;

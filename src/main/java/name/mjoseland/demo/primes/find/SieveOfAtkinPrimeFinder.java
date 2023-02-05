@@ -1,4 +1,4 @@
-package name.mjoseland.demo.primes.primes;
+package name.mjoseland.demo.primes.find;
 
 import name.mjoseland.demo.primes.util.SimpleUnsafeBitset;
 import org.springframework.stereotype.Component;

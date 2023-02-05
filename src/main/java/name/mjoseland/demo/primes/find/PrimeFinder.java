@@ -1,9 +1,8 @@
-package name.mjoseland.demo.primes.primes;
+package name.mjoseland.demo.primes.find;
 
 import java.util.List;
 
 public interface PrimeFinder {
 
-    // TODO change to Stream?
     List<Integer> getPrimes(int maxNumber);
 }
