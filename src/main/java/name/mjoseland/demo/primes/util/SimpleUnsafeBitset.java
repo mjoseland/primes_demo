@@ -75,21 +75,23 @@ public class SimpleUnsafeBitset {
      * @return the index of the next bit set to 1 or -1 if out-of-bounds
      */
     public int nextSetBit(final int startIndex) {
-        int jStartIndex = startIndex % BITS_PER_LONG;
+        if (startIndex >= this.size)
+            return -1;
 
-        for (int i = startIndex >> RIGHT_SHIFT_FOR_LONG_INDEX; i < longArray.length; i++) {
-            for (int j = jStartIndex; j < BITS_PER_LONG; j++) {
-                if ((longArray[i] & (1L << j)) != 0) {
-                    int nextSetValue = i * BITS_PER_LONG + j;
+        int i = startIndex >> RIGHT_SHIFT_FOR_LONG_INDEX;
 
-                    if (nextSetValue >= this.size)
-                        nextSetValue = -1;
+        long firstBitToCheckInFirstLong = 1L << (startIndex % BITS_PER_LONG);
 
-                    return nextSetValue;
-                }
+        long longWithUnnecessaryBitsCleared = longArray[i] & (firstBitToCheckInFirstLong * -1);
+
+        if (longWithUnnecessaryBitsCleared != 0) {
+            return i * BITS_PER_LONG + Long.numberOfTrailingZeros(longWithUnnecessaryBitsCleared);
+        }
+
+        for (i++; i < longArray.length; i++) {
+            if (longArray[i] != 0) {
+                return i * BITS_PER_LONG + Long.numberOfTrailingZeros(longArray[i]);
             }
-
-            jStartIndex = 0;
         }
 
         return -1;
@@ -102,21 +104,33 @@ public class SimpleUnsafeBitset {
      * @return the index of the next bit set to 0 or -1 if out-of-bounds
      */
     public int nextUnsetBit(final int startIndex) {
-        int jStartIndex = startIndex % BITS_PER_LONG;
+        if (startIndex >= this.size)
+            return -1;
 
-        for (int i = startIndex / BITS_PER_LONG; i < longArray.length; i++) {
-            for (int j = jStartIndex; j < BITS_PER_LONG; j++) {
-                if ((longArray[i] & (1L << j)) == 0) {
-                    int nextUnsetValue = i * BITS_PER_LONG + j;
+        int i = startIndex >> RIGHT_SHIFT_FOR_LONG_INDEX;
 
-                    if (nextUnsetValue >= this.size)
-                        nextUnsetValue = -1;
+        long firstBitToCheckInFirstLong = 1L << (startIndex % BITS_PER_LONG);
 
-                    return nextUnsetValue;
-                }
+        long longWithUnnecessaryBitsSetTo1 = longArray[i] | (firstBitToCheckInFirstLong - 1);
+
+        if (longWithUnnecessaryBitsSetTo1 != -1) {
+            int result = i * BITS_PER_LONG + Long.numberOfTrailingZeros(~longWithUnnecessaryBitsSetTo1);
+
+            if (result >= this.size)
+                return -1;
+
+            return result;
+        }
+
+        for (i++; i < longArray.length; i++) {
+            if (longArray[i] != -1) {
+                int result = i * BITS_PER_LONG + Long.numberOfTrailingZeros(~longArray[i]);
+
+                if (result >= this.size)
+                    return -1;
+
+                return result;
             }
-
-            jStartIndex = 0;
         }
 
         return -1;
