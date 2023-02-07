@@ -12,21 +12,31 @@ import java.util.stream.Collectors;
 @ShellComponent
 public class PrimeFinderCommand {
 
-    private final PrimeFinder basicPrimeFinder;
+    private final PrimeFinder sieveOfAtkinPrimeFinder;
+    private final PrimeFinder sieveOfEratosthenesPrimeFinder;
 
-    PrimeFinderCommand(@Autowired @Qualifier("sieveOfAtkinPrimeFinder") PrimeFinder basicPrimeFinder) {
-        this.basicPrimeFinder = basicPrimeFinder;
+    PrimeFinderCommand(
+        @Autowired @Qualifier("sieveOfAtkinPrimeFinder") PrimeFinder sieveOfAtkinPrimeFinder,
+        @Autowired @Qualifier("sieveOfEratosthenesPrimeFinder") PrimeFinder sieveOfEratosthenesPrimeFinder
+    ) {
+        this.sieveOfAtkinPrimeFinder = sieveOfAtkinPrimeFinder;
+        this.sieveOfEratosthenesPrimeFinder = sieveOfEratosthenesPrimeFinder;
     }
 
     @ShellMethod("Returns count and ten highest primes <= a number")
-    public String primes(final int number) {
-        if (number <= 0) {
-            return "Please enter a positive integer";
-        }
+    public String a(final int number) {
+        return primes(number, sieveOfAtkinPrimeFinder);
+    }
 
+    @ShellMethod("Returns count and ten highest primes <= a number")
+    public String e(final int number) {
+        return primes(number, sieveOfEratosthenesPrimeFinder);
+    }
+
+    private String primes(final int number, PrimeFinder primeFinder) {
         long start = System.currentTimeMillis();
 
-        List<Integer> primesList = basicPrimeFinder.getPrimes(number);
+        List<Integer> primesList = primeFinder.getPrimes(number);
 
         long runTime = System.currentTimeMillis() - start;
 
