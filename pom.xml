@@ -14,11 +14,11 @@
     <name>primes_demo</name>
     <description>primes_demo</description>
     <properties>
-        <java.version>19</java.version>
+        <java.version>17</java.version>
         <spring-shell.version>3.0.0</spring-shell.version>
         <spring-boot.version>3.0.2</spring-boot.version>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>

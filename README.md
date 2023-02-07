@@ -1,6 +1,11 @@
+## Overview
+[Sieve of Atkin](https://en.wikipedia.org/wiki/Sieve_of_Atkin) and 
+[Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) 
+implementations in Java with Spring Shell.
+
 ## Requirements
-* Java 19 JDK
-* JAVA_HOME and PATH environment variables set to JDK 19
+* JDK 17
+* JAVA_HOME and PATH environment variables set to the JDK installation directory
 
 ## How to Build/Run
 ```
