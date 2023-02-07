@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@Disabled
+// TODO fix this test
+@Disabled("This test doesn't complete for unknown reasons")
 class PrimesDemoApplicationTests {
 
     @Test

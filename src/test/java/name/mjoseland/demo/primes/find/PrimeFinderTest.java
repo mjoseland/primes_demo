@@ -1,6 +1,7 @@
 package name.mjoseland.demo.primes.find;
 
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,6 +18,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PrimeFinderTest {
 
     public static final String FIRST_1000_PRIMES_FILENAME = "src/test/resources/first_1000_primes.txt";
+
+    @ParameterizedTest
+    @MethodSource("getPrimeFinders")
+    void assertForNegative1(PrimeFinder primeFinder) {
+        List<Integer> result = primeFinder.getPrimes(-1);
+
+        assertThat(result).isEmpty();
+    }
+
+    @ParameterizedTest
+    @MethodSource("getPrimeFinders")
+    void assertFor0(PrimeFinder primeFinder) {
+        List<Integer> result = primeFinder.getPrimes(0);
+
+        assertThat(result).isEmpty();
+    }
 
     @ParameterizedTest
     @MethodSource("getPrimeFinders")
@@ -40,6 +57,7 @@ class PrimeFinderTest {
         assertThat(result).hasSize(78498);
     }
 
+    @Disabled("This test passes (at the time of being disabled) but it takes a long time to run")
     @ParameterizedTest
     @MethodSource("getPrimeFinders")
     void assertCountFor1Trillion(PrimeFinder primeFinder) {
@@ -48,11 +66,11 @@ class PrimeFinderTest {
         assertThat(result).hasSize(50847534);
     }
 
-    // TODO ensure this passes
-    @Disabled
-    @ParameterizedTest
-    @MethodSource("getPrimeFinders")
-    void assertCountForMaxInteger(PrimeFinder primeFinder) {
+    @Disabled("This test passes (at the time of being disabled) but it takes a long time to run")
+    @Test
+    void assertCountForMaxInteger() {
+        PrimeFinder primeFinder = new SieveOfAtkinPrimeFinder();
+
         List<Integer> result = primeFinder.getPrimes(Integer.MAX_VALUE);
 
         assertThat(result).hasSize(105097565);
