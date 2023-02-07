@@ -1,5 +1,6 @@
 package name.mjoseland.demo.primes.find;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -39,7 +40,23 @@ class PrimeFinderTest {
         assertThat(result).hasSize(78498);
     }
 
-    // TODO test overflows
+    @ParameterizedTest
+    @MethodSource("getPrimeFinders")
+    void assertCountFor1Trillion(PrimeFinder primeFinder) {
+        List<Integer> result = primeFinder.getPrimes(1_000_000_000);
+
+        assertThat(result).hasSize(50847534);
+    }
+
+    // TODO ensure this passes
+    @Disabled
+    @ParameterizedTest
+    @MethodSource("getPrimeFinders")
+    void assertCountForMaxInteger(PrimeFinder primeFinder) {
+        List<Integer> result = primeFinder.getPrimes(Integer.MAX_VALUE);
+
+        assertThat(result).hasSize(105097565);
+    }
 
     private static Stream<Arguments> getPrimeFinders() {
         return Stream.of(

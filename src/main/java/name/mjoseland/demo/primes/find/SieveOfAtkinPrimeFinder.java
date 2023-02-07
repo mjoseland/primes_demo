@@ -176,6 +176,7 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
         int i = 0;
         int j = 0;
 
+        // TODO change to nextSetBit and/or combine with transferBitset
         for (int n = 1; n <= maxN; n = (i * 60) + WHEEL_HIT_POSITIONS[j++]) {
             if (sieveBitset.get(toSieveBitsetIndex(n))) {
                 eliminateMultiplesOfSquaredPrime(sieveBitset, maxNumber, n * n);
@@ -193,15 +194,16 @@ public final class SieveOfAtkinPrimeFinder implements PrimeFinder {
         final int maxNumber,
         final int squaredPrime
     ) {
-        int i = 0;
-        int j = 0;
+        final int maxW = ((maxNumber - squaredPrime) / squaredPrime) /  60;
 
-        for (int n = squaredPrime; n <= maxNumber && n > 0; n = squaredPrime * ((i * 60) + WHEEL_HIT_POSITIONS[j++])) {
-            sieveBitset.unset(toSieveBitsetIndex(n));
+        for (int w = 0; w <= maxW; w++) {
+            for (int x : WHEEL_HIT_POSITIONS) {
+                long n = squaredPrime * (60L * w + x);
 
-            if (j >= WHEEL_HIT_POSITIONS.length) {
-                i++;
-                j = 0;
+                if (n > maxNumber)
+                    break;
+
+                sieveBitset.unset(toSieveBitsetIndex((int) n));
             }
         }
     }
